@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 
+// editing space
 export default function App() {
   return (
     <View style={styles.container}>
