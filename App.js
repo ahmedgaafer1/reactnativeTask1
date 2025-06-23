@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Text,
   TextInput,
@@ -6,32 +7,119 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
-
+import { SafeAreaView } from "react-native-safe-area-context";
+import uuid from "react-native-uuid";
 // editing space
 export default function App() {
+  const [todos, settodos] = useState([]);
+  const [title, settitle] = useState("");
+  const [desc, setdesc] = useState("");
+  const [filteration, setfilter] = useState("all");
+
+  const handlesub = () => {
+    if (!title.trim() || !desc.trim()) return;
+
+    const newtodo = {
+      id: uuid.v4(),
+      title: title,
+      desc: desc,
+      active: "active",
+    };
+
+    settodos((prev) => {
+      return [...prev, newtodo];
+    });
+    settitle("");
+    setdesc("");
+    setfilter("all");
+  };
+
+  const filtereddata = todos.filter((todo) => {
+    if (filteration == "all") return true;
+    return todo.active === filteration.toLowerCase();
+  });
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 19 }}>
         Todo App{" "}
       </Text>
-      <TextInput style={styles.input} placeholder="Enter Title" />
-      <TextInput style={styles.input} placeholder="Enter Description" />
-      <TouchableOpacity style={styles.submitBtn} activeOpacity={0.7}>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Title"
+        value={title}
+        onChangeText={(val) => {
+          settitle(val);
+        }}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Description"
+        value={desc}
+        onChangeText={(val) => {
+          setdesc(val);
+        }}
+      />
+      <TouchableOpacity
+        style={styles.submitBtn}
+        activeOpacity={0.7}
+        onPress={handlesub}
+      >
         <Text style={{ ...styles.text, fontWeight: "bold" }}>Submit </Text>
       </TouchableOpacity>
-      <View style={styles.dividerLine} />
+      <View style={styles.dividerLine} /> {/*   horizontal line */}
       <View style={styles.filterContainer}>
-        <TouchableOpacity style={styles.activeFilterBtn} activeOpacity={0.7}>
-          <Text style={styles.activeFilterText}>All</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.filterBtn} activeOpacity={0.7}>
-          <Text style={styles.filterText}>Active</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.filterBtn} activeOpacity={0.7}>
-          <Text style={styles.filterText}>Done</Text>
-        </TouchableOpacity>
+       <TouchableOpacity
+  style={filteration === "all" ? styles.activeFilterBtn : styles.filterBtn}
+  activeOpacity={0.7}
+  onPress={() => setfilter("all")}
+>
+  <Text style={filteration === "all" ? styles.activeFilterText : styles.filterText}>
+    All
+  </Text>
+</TouchableOpacity>
+
+<TouchableOpacity
+  style={filteration === "active" ? styles.activeFilterBtn : styles.filterBtn}
+  activeOpacity={0.7}
+  onPress={() => setfilter("active")}
+>
+  <Text style={filteration === "active" ? styles.activeFilterText : styles.filterText}>
+    Active
+  </Text>
+</TouchableOpacity>
+
+<TouchableOpacity
+  style={filteration === "done" ? styles.activeFilterBtn : styles.filterBtn}
+  activeOpacity={0.7}
+  onPress={() => setfilter("done")}
+>
+  <Text style={filteration === "done" ? styles.activeFilterText : styles.filterText}>
+    Done
+  </Text>
+</TouchableOpacity>
       </View>
-    </View>
+      <FlatList
+        data={filtereddata}
+        keyExtractor={(item) => item.id}
+        style={{ width: "90%", marginTop: 20 }}
+        renderItem={({ item }) => (
+          <View
+            style={{
+              padding: 10,
+              backgroundColor: "#fff",
+              marginBottom: 10,
+              borderRadius: 5,
+            }}
+          >
+            <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+              {item.title}
+            </Text>
+            <Text>{item.desc}</Text>
+          </View>
+        )}
+      />
+    </SafeAreaView>
   );
 }
 
