@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import uuid from "react-native-uuid";
-// editing space
+// editing space   task 1
 export default function App() {
   const [todos, settodos] = useState([]);
   const [title, settitle] = useState("");
