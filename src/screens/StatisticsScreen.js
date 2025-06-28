@@ -1,8 +1,12 @@
 import { View, Text, StyleSheet } from "react-native";
-export default function StatisticsScreen({  todos }) {
+import { useSelector } from "react-redux";
+
+export default function StatisticsScreen() {
+  const todos = useSelector((state) => state.todos.todos);
   const total = todos.length;
   const done = todos.filter((t) => t.active === "done").length;
   const active = todos.filter((t) => t.active === "active").length;
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}> Todo Statistics</Text>
@@ -11,11 +15,9 @@ export default function StatisticsScreen({  todos }) {
           Total Todos: <Text style={styles.value}>{total}</Text>
         </Text>
         <Text style={styles.label}>
-          {" "}
           Done: <Text style={styles.value}>{done}</Text>
         </Text>
         <Text style={styles.label}>
-          {" "}
           Active: <Text style={styles.value}>{active}</Text>
         </Text>
       </View>

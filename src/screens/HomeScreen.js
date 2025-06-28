@@ -1,45 +1,46 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
-import uuid from "react-native-uuid";
+// import { v4 as uuidv4 } from "uuid";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addTodo,
+  deleteTodo,
+  toggleTodo,
+  setFilter,
+} from "../redux/todosSlice";
 import TodoInput from "../components/TodoInput";
 import FilterBar from "../components/FilterBar";
 import TodoList from "../components/TodoList";
 
-export default function HomeScreen({ todos, setTodos }) {
+export const TODO_STATUS = {
+  ACTIVE: "active",
+  DONE: "done",
+};
+
+export default function HomeScreen() {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
-  const [filteration, setFilter] = useState("all");
+  const dispatch = useDispatch();
+  const { todos, filter } = useSelector((state) => state.todos);
 
   const handleSubmit = () => {
     if (!title.trim() || !desc.trim()) return;
-    const newTodo = {
-      id: uuid.v4(),
-      title,
-      desc,
-      active: "active",
-    };
-    setTodos((prev) => [...prev, newTodo]);
+    dispatch(
+      addTodo({
+        id: uuidv4(),
+        title,
+        desc,
+        active: TODO_STATUS.ACTIVE,
+      })
+    );
     setTitle("");
     setDesc("");
-    setFilter("all");
-  };
-
-  const handleDelete = (id) => {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
-  };
-
-  const handleToggle = (id) => {
-    setTodos((prev) =>
-      prev.map((todo) =>
-        todo.id === id
-          ? { ...todo, active: todo.active === "done" ? "active" : "done" }
-          : todo
-      )
-    );
   };
 
   const filteredData = todos.filter((todo) =>
-    filteration === "all" ? true : todo.active === filteration
+    filter === "all" ? true : todo.active === filter
   );
 
   return (
@@ -53,11 +54,14 @@ export default function HomeScreen({ todos, setTodos }) {
         handleSubmit={handleSubmit}
       />
       <View style={styles.dividerLine} />
-      <FilterBar filteration={filteration} setFilter={setFilter} />
+      <FilterBar
+        filteration={filter}
+        setFilter={(val) => dispatch(setFilter(val))}
+      />
       <TodoList
         data={filteredData}
-        handleDelete={handleDelete}
-        handleToggle={handleToggle}
+        handleDelete={(id) => dispatch(deleteTodo(id))}
+        handleToggle={(id) => dispatch(toggleTodo(id))}
       />
     </View>
   );
