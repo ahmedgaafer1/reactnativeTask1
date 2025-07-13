@@ -2,15 +2,22 @@
 
 A **fully functional cross-platform Todo application** built with **React Native**, using **Redux Toolkit** for state management and **AsyncStorage** for local persistence. This project demonstrates clean architecture, modular component structure, and scalable Redux patterns.
 
+## 📸 Screenshots
+
+<div align="center">
+  <img src="./screens/1.png" alt="Home Screen" width="300" />
+  <img src="./screens/2.png" alt="Home Screen" width="300" />
+
 ## 🚀 Features
 
-- **Add, toggle, and delete todos** with unique IDs.
-- **Filter todos** by All / Active / Done status.
-- **Statistics screen** displaying the total, active, and done count.
-- **State persistence** using AsyncStorage.
-- **Navigation** using React Navigation with Bottom Tabs and Stack Navigator.
-- **Modern UI components**, responsive design, and accessible interactions.
-- **Error-free unique ID generation** using `uuid` with `react-native-get-random-values`.
+- ✅ **Add, toggle, and delete todos** with unique IDs
+- 🔍 **Filter todos** by All / Active / Done status
+- 📊 **Statistics screen** displaying total, active, and done count
+- 💾 **State persistence** using AsyncStorage
+- 🧭 **Navigation** using React Navigation with Bottom Tabs and Stack Navigator
+- 🎨 **Modern UI components** with responsive design and accessible interactions
+- 🔐 **Error-free unique ID generation** using `uuid` with `react-native-get-random-values`
+- 📱 **Cross-platform compatibility** (iOS & Android)
 
 ## 🛠️ Technologies
 
